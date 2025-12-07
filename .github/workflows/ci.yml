@@ -17,8 +17,15 @@ jobs:
           node-version: '18'
       - name: Install
         run: npm ci
+      - name: Lint
+        run: npm run lint || true
       - name: Run unit tests
-        run: npm test -- --runInBand
+        run: npm test -- --runInBand --coverage
+      - name: Upload coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage
 
   smoke:
     needs: test
@@ -37,3 +44,22 @@ jobs:
         run: npx wait-on http://localhost:3000
       - name: Run CI smoke
         run: node scripts/integration-smoke-ci.js
+
+  build:
+    needs: smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-artifact
+          path: dist
