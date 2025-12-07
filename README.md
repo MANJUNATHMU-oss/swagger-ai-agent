@@ -17,3 +17,8 @@ API endpoints (basic)
 - `GET /api/spec/:specId` — fetch spec metadata.
 - `GET /api/spec/:specId/operations` — list operations.
 
+Environment APIs
+
+- See `openapi/environment.yaml` for the OpenAPI spec for environment endpoints.
+- Usage examples and a smoke script are in `docs/ENV.md` and `scripts/integration-smoke.ts`.
+

@@ -1,0 +1,128 @@
+openapi: 3.0.0
+info:
+  title: Swagger AI Agent - Environment APIs
+  version: 0.1.0
+paths:
+  /api/environment:
+    post:
+      summary: Create environment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Environment'
+  /api/environment/spec/{specId}:
+    get:
+      summary: List environments for a spec
+      parameters:
+        - in: path
+          name: specId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Environment'
+  /api/environment/{envId}:
+    get:
+      summary: Get environment by id
+      parameters:
+        - in: path
+          name: envId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Environment'
+        '404':
+          description: Not found
+    put:
+      summary: Update environment (partial)
+      parameters:
+        - in: path
+          name: envId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentPatch'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Environment'
+    delete:
+      summary: Delete environment
+      parameters:
+        - in: path
+          name: envId
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+components:
+  schemas:
+    EnvironmentInput:
+      type: object
+      required:
+        - name
+        - specId
+        - baseUrl
+      properties:
+        name:
+          type: string
+        specId:
+          type: string
+        baseUrl:
+          type: string
+        defaultHeaders:
+          type: object
+          additionalProperties:
+            type: string
+    EnvironmentPatch:
+      type: object
+      properties:
+        name:
+          type: string
+        baseUrl:
+          type: string
+        defaultHeaders:
+          type: object
+          additionalProperties:
+            type: string
+    Environment:
+      allOf:
+        - $ref: '#/components/schemas/EnvironmentInput'
+        - type: object
+          properties:
+            id:
+              type: string
+            disabled:
+              type: boolean
