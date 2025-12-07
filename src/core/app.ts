@@ -3,7 +3,7 @@ import { json } from 'body-parser';
 import config from './config';
 import requestLogger from './middlewares/requestLogger';
 import errorHandler from './middlewares/errorHandler';
-import createSpecRouter from '../api/routes/spec.routes';
+import routes from '../api/routes';
 
 const createApp = (): Application => {
   const app = express();
@@ -19,8 +19,7 @@ const createApp = (): Application => {
   // Placeholder for routes
   app.get('/', (req, res) => res.send('Swagger AI Agent'));
 
-  // Spec routes
-  app.use('/spec', createSpecRouter());
+  app.use('/api', routes);
 
   // error handler (last)
   app.use(errorHandler);
