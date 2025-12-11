@@ -6,7 +6,7 @@ import EnvironmentRepository from '../../domain/repositories/EnvironmentReposito
 export class SqliteEnvironmentRepository implements EnvironmentRepository {
   private db: sqlite.Database | null = null;
 
-  constructor(private filename = ':memory:') {}
+  constructor(private filename = process.env.SQLITE_DB_FILE || ':memory:') {}
 
   async init() {
     this.db = await sqlite.open({ filename: this.filename, driver: sqlite3.Database });
